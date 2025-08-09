@@ -1,7 +1,9 @@
 from django.shortcuts import render
-import random
+from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    random_num=  random.randint(0,100)
-    return render(request,"home.html",context={"ran":random_num})
+    if request.method == "POST":
+        taskname=request.POST.get("taskname")
+        return HttpResponse(f"task:{taskname}")
+    return render(request,"home.html")
