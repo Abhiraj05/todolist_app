@@ -10,15 +10,21 @@ from django.contrib import messages
 #     return render(request,"home.html")
 
 
-def user_registeration(request):
+def new_user_register(request):
     if request.method == "POST":
-        username = models.CharField(max_length=100, null=False, blank=False)
-        password = models.CharField(max_length=10
-
-
+        username = request.POST.get("")
+        password = request.POST.get("")
+        print(request.POST)
+        user=User_Registration(username=username,
+                               password=password)
+        user.save()
+        messages.success(request, "user register successfully")
+        return redirect("")
+    return render(request, "home.html")
+    
+        
 def add_task(request):
-    if request.method == "POST":
-        form = Add_Task(request.POST)
+    if request.method == "POST": 
         task_name = request.POST.get('')
         # user_id=
         print(request.POST)
@@ -26,7 +32,7 @@ def add_task(request):
             task_name=task_name
 
         )
-        form.save()
+        task.save()
         messages.success(request, "task is added successfully")
         return redirect("")
     return render(request, "home.html")
