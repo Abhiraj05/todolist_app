@@ -1,6 +1,13 @@
-##to-do app using django
-"""
-user can the add task
-user can the delete task
-user can the mark completed task
-"""
+#  To-Do App using Django
+
+##  Features
+
+###  User Authentication
+- **Sign up** for a new account  
+- **Log in** and **log out** securely  
+
+###  Task Management
+- **Add** new tasks  
+- **Delete** existing tasks  
+- **Mark** tasks as completed  
+- **View** a list of completed and pending tasks  
