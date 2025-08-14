@@ -1,27 +1,24 @@
-{% extends "base.html" %}
-{% block start %}
+{% extends "base.html" %} {% block start %}
 
 <style>
-
   body {
-        background-color: #6a6b6dff;
-
+    background-color: #6a6b6dff;
   }
 
   .card {
     border: none;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
 
-  
   table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
   }
 
-  table th, table td {
+  table th,
+  table td {
     padding: 12px;
     text-align: left;
   }
@@ -32,94 +29,118 @@
   }
 
   table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #343a40;
   }
 
   table tbody tr:hover {
-    background-color: #e9ecef;
+    background-color: #343a40;
+
     transition: 0.2s;
   }
 
- 
-  .badge.bg-success:hover {
-    background-color: #2865a7ff !important;
-    cursor: pointer;
-  }
-  .bg-success{
-    background-color: #f32727ff !important;
-
+  .bg-success {
+    background-color: #f3df27ff !important;
   }
   .bg-unmarked {
     background-color: #2865a7ff !important;
-
   }
-    .mb-6 {
-  margin-bottom: 160px; 
-  
-}
+  .bg-delete {
+    background-color: #ff2b59ff !important;
+  }
+  .mb-6 {
+    margin-bottom: 60px;
+  }
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4 shadow-sm">
-  <a class="navbar-brand fw-bold" href="/">To do list </a>
+  <a class="navbar-brand fw-bold" href="/">To-do list </a>
   <div class="ms-auto d-flex align-items-center">
     {% if user %}
-      <span class="text-white me-3">Welcome, {{ user }}</span>
-      <a href="/login" class="btn btn-outline-light btn-sm ms-3">Logout</a>
+    <span class="text-white me-3">Welcome, {{ user }}</span>
+    <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm ms-3"
+      >Logout</a
+    >
     {% else %}
-      <a href="/login" class="btn btn-outline-light btn-sm">Login</a>
+    <a href="" class="btn btn-outline-light btn-sm">Login</a>
     {% endif %}
   </div>
 </nav>
 
-<div class="col-6 mx-auto card p-4 mt-5 mb-6">
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
+<div class="container mt-6">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+      <div class="card p-4 mt-5 mb-5">
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
+        {% endfor %} {% endif %}
 
-  <form method="POST" enctype="multipart/form-data" class="mb-4">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="taskname" class="form-label fw-semibold">Enter Task Name</label>
-      <input
-        type="text"
-        class="form-control"
-        name="taskname"
-        id="taskname"
-        placeholder="E.g., Complete Django project"
-      />
+        <form method="POST" enctype="multipart/form-data" class="mb-4">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="taskname" class="form-label fw-semibold"
+              >Enter Task Name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="taskname"
+              id="taskname"
+              placeholder="E.g., Complete Django project"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Submit</button>
+        </form>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Task Name</th>
+                <th>Created At</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for eachdata in all_tasks %}
+              <tr>
+                {% if not eachdata.task_done %}
+                <td>{{ eachdata.task_name }}</td>
+                <td>{{ eachdata.created_at }}</td>
+                {% else %}
+                <td class="text-decoration-line-through">
+                  {{ eachdata.task_name }}
+                </td>
+                <td class="text-decoration-line-through">
+                  {{ eachdata.created_at }}
+                </td>
+                {% endif %}
+                <td>
+                  {% if not eachdata.task_done %}
+                  <a
+                    href="{% url 'task_done' eachdata.id %}"
+                    class="badge bg-unmarked text-decoration-none"
+                  >
+                    Mark Completed
+                  </a>
+                  {% else %}
+                  <span class="badge bg-success">Completed</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a
+                    href="{% url 'delete_task' eachdata.id %}"
+                    class="badge bg-delete text-decoration-none"
+                    >delete</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary w-100">Submit</button>
-  </form>
-
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Task Name</th>
-          <th>Created At</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for eachdata in all_tasks %}
-        <tr>
-          <td>{{ eachdata.task_name }}</td>
-          <td>{{ eachdata.created_at }}</td>
-          <td>
-            {% if not eachdata.task_done %}
-              <a href="{% url 'task_done' eachdata.id %}" class="badge bg-unmarked text-decoration-none">
-                Mark Completed
-              </a>
-            {% else %}
-              <span class="badge bg-success">Completed</span>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
   </div>
 </div>
 

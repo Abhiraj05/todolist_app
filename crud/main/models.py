@@ -14,6 +14,6 @@ class Add_Task(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     task_done = models.IntegerField(default=False)
-    
+
     def __str__(self):
         return f"{self.task_name} & {self.user}"
