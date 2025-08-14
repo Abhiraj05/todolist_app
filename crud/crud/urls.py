@@ -16,9 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import index
+from main.views import new_user_register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/',index,name='index')
+    path('',new_user_register,name='new_user_register')
 ]
