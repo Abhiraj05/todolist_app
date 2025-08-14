@@ -1,23 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>crud</title>
-  </head>
-  <body>
-    <form method="POST">
-      {% csrf_token %}
-      <div>
-        <input type="text" name="usename" placeholder="task name" />
+{% extends "base.html" %}
+{% block start %}
+
+<style>
+  body {
+    background-color: #6a6b6dff;
+  }
+
+  .card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  h3 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+   .mt-6 {
+  margin-top: 160px; 
+}
+</style>
+
+<div class="col-4 mx-auto card p-4 mt-6">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">
+        {{ message }}
       </div>
-        <div>
-        <input type="password" name="password" placeholder="task name" />
-      </div>
-      <button type="submit">add</button>
-    </form>
-    {% comment %}
-    <p>{{task}}</p>
-    {% endcomment %}
-  </body>
-</html>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3>Sign Up</h3>
+
+    <div class="mb-3">
+      <label for="username" class="form-label">Enter Username</label>
+      <input
+        type="text"
+        class="form-control"
+        name="username"
+        id="username"
+        placeholder="Username"
+      >
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Enter Password</label>
+      <input
+        type="password"
+        class="form-control"
+        name="password"
+        id="password"
+        placeholder="Password"
+      >
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+  </form>
+  <div>
+  <p>already have an account</p><a href="/login">signin</a>
+
+  </div>
+</div>
+
+{% endblock %}

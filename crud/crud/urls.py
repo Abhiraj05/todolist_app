@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import new_user_register
+from main.views import new_user_register,login_check,add_task,task_done,redirect_to_signup
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',new_user_register,name='new_user_register')
-]
+    path('admin/',admin.site.urls),
+    path('',new_user_register,name='new_user_register'),
+    path('login/',login_check,name='login_check'),
+    path('add-task/',add_task,name='add_task'),
+    path('task_done/<int:task_id>/',task_done,name='task_done'),
+    path('/',redirect_to_signup,name='task_done'),
+    ]

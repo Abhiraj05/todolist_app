@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block start %}
+
+<style>
+
+  body {
+        background-color: #6a6b6dff;
+
+  }
+
+  .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  table th, table td {
+    padding: 12px;
+    text-align: left;
+  }
+
+  table thead th {
+    background-color: #343a40;
+    color: white;
+  }
+
+  table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  table tbody tr:hover {
+    background-color: #e9ecef;
+    transition: 0.2s;
+  }
+
+ 
+  .badge.bg-success:hover {
+    background-color: #2865a7ff !important;
+    cursor: pointer;
+  }
+  .bg-success{
+    background-color: #f32727ff !important;
+
+  }
+  .bg-unmarked {
+    background-color: #2865a7ff !important;
+
+  }
+    .mb-6 {
+  margin-bottom: 160px; 
+  
+}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4 shadow-sm">
+  <a class="navbar-brand fw-bold" href="/">To do list </a>
+  <div class="ms-auto d-flex align-items-center">
+    {% if user %}
+      <span class="text-white me-3">Welcome, {{ user }}</span>
+      <a href="/login" class="btn btn-outline-light btn-sm ms-3">Logout</a>
+    {% else %}
+      <a href="/login" class="btn btn-outline-light btn-sm">Login</a>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="col-6 mx-auto card p-4 mt-5 mb-6">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST" enctype="multipart/form-data" class="mb-4">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="taskname" class="form-label fw-semibold">Enter Task Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="taskname"
+        id="taskname"
+        placeholder="E.g., Complete Django project"
+      />
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Submit</button>
+  </form>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Task Name</th>
+          <th>Created At</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for eachdata in all_tasks %}
+        <tr>
+          <td>{{ eachdata.task_name }}</td>
+          <td>{{ eachdata.created_at }}</td>
+          <td>
+            {% if not eachdata.task_done %}
+              <a href="{% url 'task_done' eachdata.id %}" class="badge bg-unmarked text-decoration-none">
+                Mark Completed
+              </a>
+            {% else %}
+              <span class="badge bg-success">Completed</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
