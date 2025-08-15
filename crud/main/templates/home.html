@@ -50,26 +50,38 @@
   .mb-6 {
     margin-bottom: 60px;
   }
+  .center{
+      text-align: center;
+      font-weight:bold;
+  }
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4 shadow-sm">
-  <a class="navbar-brand fw-bold" href="/">To-do list </a>
-  <div class="ms-auto d-flex align-items-center">
-    {% if user %}
-    <span class="text-white me-3">Welcome, {{ user }}</span>
-    <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm ms-3"
-      >Logout</a
-    >
-    {% else %}
-    <a href="" class="btn btn-outline-light btn-sm">Login</a>
-    {% endif %}
+  <div class="w-100 d-flex justify-content-between gap-2 align-items-center">
+    <div class="d-flex align-items-center">
+      {% if user %}
+        <span class="text-white me-5">Welcome, {{ user }}</span>
+        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm ms-5">Logout</a>
+      {% else %}
+        <a href="" class="btn btn-outline-light btn-sm">Login</a>
+      {% endif %}
+    </div>
   </div>
 </nav>
 
+
+
+
+
+
 <div class="container mt-6">
+
   <div class="row justify-content-center">
     <div class="col-12 col-sm-10 col-md-8 col-lg-6">
       <div class="card p-4 mt-5 mb-5">
+          <div class="center">
+                    <h2>to-do list</h2>
+          </div>
         {% if messages %} {% for message in messages %}
         <div class="alert alert-{{ message.tags }} mt-2">{{ message }}</div>
         {% endfor %} {% endif %}
